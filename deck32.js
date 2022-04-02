@@ -43,7 +43,36 @@ class Card {
     constructor(suit, value) {
         this.suit = suit
         this.value = value
+        switch (value) {
+            case "7" :
+                this.puissance = 8
+                break
+            case "8" :
+                this.puissance = 7
+                break
+            case "A" :
+                this.puissance = 6
+                break
+            case "R" :
+                this.puissance = 5
+                break
+            case "D" :
+                this.puissance = 4
+                break
+            case "V" :
+                this.puissance = 3
+                break
+            case "10" :
+                this.puissance = 2
+                break
+            case "9" :
+                this.puissance = 1
+                break
+            default :
+                console.log("on ne devrait pas voir ça")
+        }
     }
+    
 
     get color() {
     return this.suit === '♣' || this.suit === '♠' ? 'black' : 'red'
@@ -56,6 +85,7 @@ class Card {
         cardDiv.dataset.value = `${this.value} ${this.suit}`
         return cardDiv
     }
+
 }
 
 

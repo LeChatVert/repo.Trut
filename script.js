@@ -1,4 +1,5 @@
 import Deck from './deck32.js'
+import Cards from './deck32.js'
 export default nbrpli
 
 var j1main1 = document.querySelector('.j1-main1')
@@ -65,13 +66,13 @@ function debutPartie() {
   scPetitJ2 = 0
   scGrandJ1 = 0
   scGrandJ2 = 0
+  cartesPosees = 0
   arret = false
   findeManche = false
   findePartie = false
   debutManche()
   distriAuto()
   aquileTour()
-  testMain()
 }
 
 function debutManche() {
@@ -82,6 +83,7 @@ function debutManche() {
     scPliJ1 = 0
     scPliJ2 = 0
     cartesDistribuees = 0
+    cartesPosees = 0
     console.log(deck)
 }
 
@@ -138,6 +140,7 @@ nettoyagePli.addEventListener("click", () => {
   if (findepli) { 
     cleanPli()
     aquileTour()
+    queJouerOrdi()
   } else {
     texte.innerText = "Comparez le pli avant."
     console.log("Comparez le pli avant.")
@@ -214,6 +217,7 @@ var jouerM1J1 = document.querySelector(".j1-main1");
       tourJ1 = false
       tourJ2 = true
       aquileTour()
+      queJouerOrdi()
     } else {
       console.log("Y'a rien, gros cerf !")
     }
@@ -233,6 +237,7 @@ jouerM2J1.addEventListener("click", () => {
     tourJ1 = false
     tourJ2 = true
     aquileTour()
+    queJouerOrdi()
   } else {
     console.log("Y'a rien, gros cerf !")
   }
@@ -252,6 +257,7 @@ jouerM3J1.addEventListener("click", () => {
     tourJ1 = false
     tourJ2 = true
     aquileTour()
+    queJouerOrdi()
   } else {
     console.log("Y'a rien, gros cerf !")
   }
@@ -379,38 +385,97 @@ function aquileTour() {
 }
 
 // V comportement de jeu de l'ordi #IA
-// V donne un résultat correct. Est ce que ça a besoin d'être une fonction ?
+/* V donne un résultat correct. Est ce que ça a besoin d'être une fonction ?
 function testMain() {
-var mainArray =  [valeurcartes[pioche1J2.value], valeurcartes[pioche2J2.value], valeurcartes[pioche3J2.value]]
+var mainArray =  [valeurcartes pioche1J2.value, valeurcartes[pioche2J2.value], valeurcartes[pioche3J2.value]]
 var carteMini = Math.min(...mainArray);
 var carteMax = Math.max(...mainArray);
 console.log(carteMax)
 console.log(carteMini)
 }
+*/
+
+
 
 function queJouerOrdi() {
-  if (tourJ2 == true || cartesPosees == 0) { // <- quand ordi joue en premier
-  //ici, joue la carte la plus forte
-  } else if (cartesPosees == 1 || valeurcartes[j1pli.value] > carteMax) { // <- quand ordi joue en second
-    // ici, jouer la carte la plus petite
-  } else if (cartesPosees == 1 || valeurcartes[j1pli.value] < carteMax) {
-    //ici, jouer la carte la plus forte
-  } 
+  var mainArray =  [pioche1J2, pioche2J2, pioche3J2]
+  for (let i = 0; i < mainArray.length; i++) {
+    console.log(mainArray[i])
+  }
+  mainArray.sort(function (a, b) {
+    if (a.puissance < b.puissance) {
+      return -1
+    } else if (a.puissance > b.puissance) {
+        return 1
+    } else {
+        return 0
+    }
+  })
+  for (let i = 0; i < mainArray.length; i++) {
+    console.log(mainArray[i])
+  }
+console.log(tourJ2)
+console.log(cartesPosees)
+console.log(j1pli.puissance)
+
+
+  if (tourJ2 === true && cartesPosees === 0) { // <- quand ordi joue en premier
+    console.log("je joue en premier, plus grande")    
+    ordiJoue(mainArray[mainArray.length -1]) //ici, joue la carte la plus forte, actuellement un test
+  } else if (cartesPosees === 1 && j1pli.puissance > mainArray[mainArray.length -1].puissance) { // <- quand ordi joue en second
+    console.log("je joue la plus petite")
+    ordiJoue(mainArray[0]) // ici, jouer la carte la plus petite, actuellement un test
+  } else if (cartesPosees === 1 && j1pli.puissance < mainArray[mainArray.length -1].puissance) {
+    console.log("je joue la plus grande")
+    ordiJoue(mainArray[mainArray.length -1]) //ici, jouer la carte la plus forte, actuellement un test
+  } else {
+    console.log("je ne suis rentré null part")
+    
+  }
 }
+
+
+function ordiJoue(carteajouer) {
+    j2EmplCarteJoue.appendChild(carteajouer.getHTML())
+    console.log(j2main1.innerHTML)
+    console.log(j2main2.innerHTML)
+    console.log(j2main3.innerHTML)
+    console.log(carteajouer.getHTML())
+    j2pli = carteajouer
+    if (j2main1.innerHTML === j2EmplCarteJoue.innerHTML) {
+      j2main1.innerHTML = ''
+    } else if (j2main2.innerHTML === j2EmplCarteJoue.innerHTML) {
+      j2main2.innerHTML = ''
+    } else {
+      j2main3.innerHTML = ''
+    }
+
+    carteajouer = null
+    cartesPosees++
+    tourJ2 = false
+    tourJ1 = true
+    aquileTour()  
+
+  if (cartesPosees == 2) {
+    comparaison()
+  }
+};
 
 /* 01.04.22, 2300 :
 const array1 = [5, 11, 8, 130, 44];
 const found = array1.find(element => element > 100);
 console.log(found);
+
+var carteHaute = mainArray.find(element => element > valeurcartes[j1pli.value]) // < si ordi joue en 2eme. Cette ligne est elle correcte ?
+
 */
 
-var carteHaute = mainArray.find(element => element > valeurcartes[j1pli.value]) // < si ordi joue en 2eme.
+
 
 
 
 // V COPIE de click joueur 2, c'est ok de les transformer en function ou de bidouiller
-var jouerM1J2 = document.querySelector(".j2-main1");
-  jouerM1J2.addEventListener("click", () => {
+function ordiJoue1() {
     if (pioche1J2 !== null && tourJ2 == true) {
       j2EmplCarteJoue.appendChild(pioche1J2.getHTML())
       j2pli = pioche1J2
@@ -426,10 +491,9 @@ var jouerM1J2 = document.querySelector(".j2-main1");
     if (cartesPosees == 2) {
       comparaison()
     }
-});
+};
 
-var jouerM2J2 = document.querySelector(".j2-main2");
-jouerM2J2.addEventListener("click", () => {
+function ordiJoue2()  {
   if (pioche2J2 !== null && tourJ2 == true) {
     j2EmplCarteJoue.appendChild(pioche2J2.getHTML())
     j2pli = pioche2J2
@@ -445,10 +509,9 @@ jouerM2J2.addEventListener("click", () => {
   if (cartesPosees == 2) {
     comparaison()
   }
-});
+};
 
-var jouerM3J2 = document.querySelector(".j2-main3");
-jouerM3J2.addEventListener("click", () => {
+function ordiJoue3()  {
   if (pioche3J2 !== null && tourJ2 == true) {
     j2EmplCarteJoue.appendChild(pioche3J2.getHTML())
     j2pli = pioche3J2
@@ -464,4 +527,4 @@ jouerM3J2.addEventListener("click", () => {
   if (cartesPosees == 2) {
     comparaison()
   }
-});
+};
