@@ -86,6 +86,14 @@ class Card {
         return cardDiv
     }
 
+    getDOS() {
+        const cardDiv = document.createElement('div')
+        cardDiv.innerText = "Trut"
+        cardDiv.classList.add("dos", this.color)
+        cardDiv.dataset.value = `${this.value} ${this.suit}`
+        return cardDiv
+    }
+
 }
 
 
