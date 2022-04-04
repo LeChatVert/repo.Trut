@@ -34,11 +34,11 @@ let deck
 let cartesDistribuees = 0, arret
 var pioche1J1, pioche2J1, pioche3J1, pioche1J2, pioche2J2, pioche3J2, j1pli, j2pli
 var nbrpli, findepli, findePartie, findeManche
-var scPetitJ1 = 0, scPetitJ2 = 0, scGrandJ1 = 0, scGrandJ2 = 0
+var scPetitJ1 = 0, scPetitJ2 = 0, scGrandJ1 = 0, scGrandJ2 = 0, scChoisi
 var scPliJ1, scPliJ2, pourriDeCote
 var cartesPosees = 0
 var tourJ1, tourJ2
-var cartejoueJ1
+
 
 
 // V initialisation
@@ -140,7 +140,7 @@ function majScore() {
 var nettoyagePli = document.getElementById("findePli");
 nettoyagePli.addEventListener("click", () => {
   if (findepli) {
-    j1pli = 0 // < pour vider j1pli, est ce que 0 est approprié ?
+    
     cleanPli()
     aquileTour()
     queJouerOrdi()
@@ -151,7 +151,7 @@ nettoyagePli.addEventListener("click", () => {
 
   if (scPliJ1 == 2 || scPliJ2 == 2) { //conditions pour fin de manche
     finirlaManche()
-    if (scPetitJ1 == 2 || scPetitJ2 == 2) { //conditions de victoire réduites pour test
+    if (scPetitJ1 == 2 || scPetitJ2 == 2) { //conditions de victoire réduites pour test. Comparer scGrand avec scChoisi si input joueur.
       findePartie = true
     }
     if (findePartie == false) {
@@ -185,7 +185,7 @@ function updatePli() {
   nbrpliElement.innerText = nbrpli
 }
 
-// V distribution des cartes. Si je change .getDOS pour les cartes de l'ordi, soucis d'affichage
+// V distribution des cartes. Si je change .getDOS pour les cartes de l'ordi, soucis d'affichage car choses différentes pour comparaison
 function distriAuto() {
   if (cartesDistribuees == 0) {
     pioche1J1 = deck.pop()
@@ -208,54 +208,6 @@ function distriAuto() {
   }
 }
 
-// V test de factorisation de joueur une carte de j1
-/*
-function creaMainJoueur() {
-  var mainJoueur = [pioche1J1, pioche2J1, pioche3J1]
-  var mainJ1Array = new Array()
-  for (let i = 0; i < mainJoueur.length; i++) {
-    if (mainJoueur[i] !== null) {
-      mainJ1Array.push(mainJoueur[i])
-    }
-  }
-}
-
- V représentation des cartes en main et jouées.
-function ordiJoue(carteajouer) {
-  j2EmplCarteJoue.appendChild(carteajouer.getHTML())
-  j2pli = carteajouer
-  if 
-
-
-var J1joue = document.querySelector(".mainJoueur");
-J1joue.addEventListener("click", () => {
-  j1EmplCarteJoue.appendChild(cartejoueJ1.getHTML())
-  j1pli = cartejoueJ1
-
-  if (j1main1.innerHTML === j1EmplCarteJoue.innerHTML) { //if, else if et else : vident l'image de la main (la carte n'est plus en main, elle est jouée)
-    j1main1.innerHTML = ''
-    pioche1J1 = null
-  } else if (j1main2.innerHTML === j1EmplCarteJoue.innerHTML) {
-    j1main2.innerHTML = ''
-    pioche2J1 = null
-  } else {
-    j1main3.innerHTML = ''
-    pioche3J1 = null
-  }
-
-  cartejoueJ1 = null
-  cartesPosees++
-  tourJ1 = false
-  tourJ2 = true
-  aquileTour()
-  queJouerOrdi()
-
-  if (cartesPosees === 2) {
-    comparaison()
-  }
-});
-
-*/
 
 // V click joueur 1
 var jouerM1J1 = document.querySelector(".j1-main1");
@@ -317,7 +269,6 @@ jouerM3J1.addEventListener("click", () => {
     comparaison()
   }
 });
-
 
 // V comparaison des cartes du pli
 function comparaison() {
@@ -443,3 +394,24 @@ function ordiJoue(carteajouer) {
     comparaison()
   }
 };
+
+/*
+Pour le futur :
+
+function demandeNom() { //a mettre dans initialisation, pour ne pas le rerentrer à chaque nouvelle partie.
+  let nomJoueur1 = prompt("Entrez votre nom", "écrivez votre nom ici");
+  if (nomJoueur1 != null) {
+    document.querySelector(".affiNom").innerText =
+    nomJoueur1
+  }
+}
+
+<div class="affiNom score"></div>
+
+function demandeScore() {
+  let scChoisi = prompt("Choisissez un nombre de long à atteindre", "ici");
+  if (scChoisi != null) {
+    scChoisi = 1 //valeur par défaut
+  }
+}
+*/
