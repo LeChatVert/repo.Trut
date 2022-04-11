@@ -14,8 +14,10 @@ export default class Deck {
         return this.cards.length
     }
    
-    pop() {
-       return this.cards.shift()
+    pop(position) {
+      var carte = this.cards.shift()
+      carte.position = position
+      return carte 
     }
 
     push(card) {
@@ -90,7 +92,6 @@ class Card {
         const cardDiv = document.createElement('div')
         cardDiv.innerText = "Trut"
         cardDiv.classList.add("dos", this.color)
-        cardDiv.dataset.value = `${this.value} ${this.suit}`
         return cardDiv
     }
 

@@ -140,10 +140,12 @@ function majScore() {
 var nettoyagePli = document.getElementById("findePli");
 nettoyagePli.addEventListener("click", () => {
   if (findepli) {
-    
     cleanPli()
-    aquileTour()
-    queJouerOrdi()
+     if (nbrpli < 3) {
+      aquileTour()
+      queJouerOrdi()
+    }
+    
   } else {
     texte.innerText = "Comparez le pli avant."
     console.log("Comparez le pli avant.")
@@ -174,6 +176,7 @@ function cleanPli() {
   j1EmplCarteJoue.innerHTML = ''
   texte.innerText = ''
   j2EmplCarteJoue.innerHTML = ''
+  console.log("clean carte2")
   nbrpli++;
   console.log("Nombre de pli :", nbrpli)
   updatePli()
@@ -185,22 +188,22 @@ function updatePli() {
   nbrpliElement.innerText = nbrpli
 }
 
-// V distribution des cartes. Si je change .getDOS pour les cartes de l'ordi, soucis d'affichage car choses différentes pour comparaison
+// V distribution des cartes.
 function distriAuto() {
   if (cartesDistribuees == 0) {
-    pioche1J1 = deck.pop()
+    pioche1J1 = deck.pop(1)
     j1main1.appendChild(pioche1J1.getHTML())
-    pioche2J1 = deck.pop()
+    pioche2J1 = deck.pop(2)
     j1main2.appendChild(pioche2J1.getHTML())
-    pioche3J1 = deck.pop()
+    pioche3J1 = deck.pop(3)
     j1main3.appendChild(pioche3J1.getHTML())
 
-    pioche1J2 = deck.pop()
-    j2main1.appendChild(pioche1J2.getHTML())
-    pioche2J2 = deck.pop()
-    j2main2.appendChild(pioche2J2.getHTML())
-    pioche3J2 = deck.pop()
-    j2main3.appendChild(pioche3J2.getHTML())
+    pioche1J2 = deck.pop(1)
+    j2main1.appendChild(pioche1J2.getDOS())
+    pioche2J2 = deck.pop(2)
+    j2main2.appendChild(pioche2J2.getDOS())
+    pioche3J2 = deck.pop(3)
+    j2main3.appendChild(pioche3J2.getDOS())
 
     cartesDistribuees = 1
   } else {
@@ -270,7 +273,7 @@ jouerM3J1.addEventListener("click", () => {
   }
 });
 
-// V comparaison des cartes du pli
+// V comparaison des cartes du pli. SOUCI quand 1 pli chacun et se termine en pourri : cas pas référencé
 function comparaison() {
   if (cartesPosees !== 2) {
     texte.innerText = "L'autre n'a pas encore joué."
@@ -336,6 +339,8 @@ function queJouerOrdi() {
       mainArray.push(mainOrdi[i])
     }
   }
+  var nbrCarte = mainArray.length
+
   mainArray.sort(function (a, b) {
     if (a.puissance < b.puissance) {
       return -1
@@ -369,17 +374,20 @@ function queJouerOrdi() {
   } 
 }
 
-// V représentation des cartes en main et jouées. C'est ici que ça coince avec le .getDOS, il faut trouver un element à comparer : value, suit, puissance ?
+// V représentation des cartes en main et jouées. 
 function ordiJoue(carteajouer) {
   j2EmplCarteJoue.appendChild(carteajouer.getHTML())
   j2pli = carteajouer
-  if (j2main1.innerHTML === j2EmplCarteJoue.innerHTML) { //if, else if et else : vident l'image de la main (la carte n'est plus en main, elle est jouée)
+  if (carteajouer.position === 1) {
+    console.log("je passe par if")
     j2main1.innerHTML = ''
     pioche1J2 = null
-  } else if (j2main2.innerHTML === j2EmplCarteJoue.innerHTML) {
+  } else if (carteajouer.position === 2) {
+    console.log("je passe par else if")
     j2main2.innerHTML = ''
     pioche2J2 = null
   } else {
+    console.log("je passe par else")
     j2main3.innerHTML = ''
     pioche3J2 = null
   }
